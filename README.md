@@ -51,7 +51,7 @@ TRAINING_DB_PORT=5432
 ## 📚 Proje Yapısı
 
 ```
-turkish-ner-masking/
+turkish-ner-masker/
 ├── src/
 │   ├── __init__.py
 │   ├── database.py      # Veritabanı bağlantı işlemleri
