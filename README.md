@@ -16,7 +16,7 @@ Bu proje, Türkçe metinlerdeki kişi adları, soyadları ve kullanıcı adları
 1. Projeyi klonlayın:
 ```bash
 git clone <repository-url>
-cd turkish-ner-masking
+cd turkish-ner-masker
 ```
 
 2. Sanal ortam oluşturun ve aktifleştirin:
