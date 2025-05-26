@@ -90,7 +90,7 @@ def run_tests():
     ]
 
 
-    name_filtered_data = pd.read_excel('../name_filtered_data.xlsx')
+    name_filtered_data = pd.read_excel('name_filtered_data.xlsx')
 
     # Run tests 1
     print("Running Turkish NER Masking Tests 1")
