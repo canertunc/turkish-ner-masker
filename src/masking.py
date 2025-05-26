@@ -34,7 +34,9 @@ class NameMasker:
             return text, {'name': [], 'surname': []}
         
         masked_words = {'name': [], 'surname': []}
+       
         words = text.split()
+        
         i = 0
         
         while i < len(words):
@@ -46,8 +48,9 @@ class NameMasker:
             # Find best name-surname combination
             found_combination = TextProcessor.find_best_name_surname_combination(
                 words, i, self.name_list, self.surname_list)
-            
-            if found_combination:
+            time_words = ["geçen","ay","hafta","ay","yıl","saat","dakika","saniye","dün","geçen hafta","geçen ay","geçen yıl", "önce"]
+            words[i] = words[i].replace(",", "")
+            if found_combination and words[i] not in time_words:
                 name_part, surname_part, total_words, suffix = found_combination
                 
                 # Check for verbs
@@ -62,15 +65,16 @@ class NameMasker:
                 if name_part:
                     mask_parts.append("{name}")
                     masked_words['name'].append(name_part)
+
                 if surname_part:
                     mask_parts.append("{surname}")
                     masked_words['surname'].append(surname_part)
-                
+
                 mask_text = " ".join(mask_parts)
                 if suffix and not suffix.startswith("'"):
                     suffix = "'" + suffix
                 mask_text += suffix
-                
+
                 # Replace words
                 for k in range(total_words):
                     if k == 0:
@@ -85,7 +89,6 @@ class NameMasker:
         # Clean empty strings
         words = [w for w in words if w]
         masked_text = ' '.join(words)
-        
         return masked_text, masked_words
 
     def analyze_with_ner(self, text: str) -> Tuple[str, Dict[str, List[str]]]:
@@ -115,7 +118,6 @@ class NameMasker:
                 # Try to identify name and surname parts
                 found_combination = TextProcessor.find_best_name_surname_combination(
                     parts, 0, self.name_list, self.surname_list)
-                
                 if found_combination:
                     name_part, surname_part, _, suffix = found_combination
                     mask = []
