@@ -23,6 +23,9 @@ class TextProcessor:
     @staticmethod
     def strip_turkish_suffixes(word: str) -> Tuple[str, str]:
         """Remove Turkish suffixes from a word"""
+        # Önce kesme işaretlerini standardize et
+        word = word.replace('\u2019', "'")  # Unicode kesme işaretini ASCII kesme işaretine çevir
+        
         suffixes = [
             "'nın", "'nin", "'ın", "'in", "'a", "'e", "'da", "'de", 
             "'dan", "'den", "'i", "'ı", "'ya", "'ye", "'nun", 
