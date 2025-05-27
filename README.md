@@ -30,7 +30,28 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2. Basit Kullanım
+### 2. Veritabanı Yapılandırması
+Projenin kök dizininde `.env` dosyası oluşturun ve aşağıdaki bilgileri ekleyin:
+
+#### Ana Veritabanı Bilgileri
+```env
+DB_NAME=
+DB_USER=
+DB_PASSWORD=
+DB_HOST=
+DB_PORT=
+```
+
+#### Eğitim Veritabanı Bilgileri
+```env
+TRAINING_DB_NAME=
+TRAINING_DB_USER=
+TRAINING_DB_PASSWORD=
+TRAINING_DB_HOST=
+TRAINING_DB_PORT=
+```
+
+### 3. Basit Kullanım
 ```python
 from src.masking import NameMasker
 
@@ -45,7 +66,7 @@ print(f"Orijinal: {original_text}")
 print(f"Maskelenmiş: {masked_text}")
 ```
 
-### 3. Hızlı Test
+### 4. Hızlı Test
 ```bash
 python tests/tester.py
 ```
