@@ -17,7 +17,7 @@ Bu kod, Türkçe metinlerdeki **kişi adları**, **soyadları** ve **kullanıcı
 ```bash
 # Projeyi klonla
 git clone <repository-url>
-cd turkish-ner-masking
+cd turkish-ner-masker
 
 # Sanal ortam oluştur ve aktifleştir
 python -m venv venv
