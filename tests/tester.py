@@ -6,12 +6,12 @@ from src.masking import NameMasker
 
 def run_tests():
     # Test data
-    name_list = ["Su","Melike","Caner","Erhan Avcı","Veli","Erhan","Ayşe","Halil","Cemal","Emine","Kadir","Zeynep","Emrah","Mustafa","Hasan","Mert","Aylin","Eda","Merve Melisa Ezgi","Yıldız","Muhammet","Yıldız","Deniz","Eda","Eda Su","Rıza",
+    name_list = ["Salim","Kerim","Kerime","Su","Melike","Caner","Erhan Avcı","Veli","Erhan","Ayşe","Halil","Cemal","Emine","Kadir","Zeynep","Emrah","Mustafa","Hasan","Mert","Aylin","Eda","Merve Melisa Ezgi","Yıldız","Muhammet","Yıldız","Deniz","Eda","Eda Su","Rıza",
                  "Ahmetcan","Sadık","Merve","Zeynep","Merve Melisa","Merve Melisa","Ahmet","Ulaş", "Ali", 
                  "Ahmet Can", "Mehmet", "Ayşe", "Melike", "Eda", "Büşra", "Sevim", "Merve", "Can Deniz", 
                  "Deniz", "Bekir Ali", "Can", "Deniz"]
     
-    surname_list = ["Tekin","Akdere","Tunç","Yılmaz","Tunç","Avcı","Ramazan","Akca","Albora","Sandal","Kaya","Nur","Akça","Sanlı","Demir","Demir","Atamer","Karaca","Erdoğan Yılmaz","Muhammet","Yıldız","Deniz","Yıldız","Su Karaca","Karaca",
+    surname_list = ["Turan","Yılmaz","Atınç","Tekin","Akdere","Tunç","Yılmaz","Tunç","Avcı","Ramazan","Akca","Albora","Sandal","Kaya","Nur","Akça","Sanlı","Demir","Demir","Atamer","Karaca","Erdoğan Yılmaz","Muhammet","Yıldız","Deniz","Yıldız","Su Karaca","Karaca",
                     "Aydın","Akçakale","Turan","Demir Yılmaz","Bedir","Erdoğan","Yılmaz","Yılmaz","Ferit", 
                     "Demir", "Yılmaz", "Kaya Demir", "Demir", "Çelik", "Öztürk", "Salman", "Yılmaz", 
                     "Can Yılmaz", "Salman", "Demir Yılmaz", "Can Mert", "Alp", "Akça"]
@@ -86,11 +86,23 @@ def run_tests():
         "Erhan Avcı Yılmazın oluşturduğu arızalar nedir?",
         "mert’in geçen hafta ilgilendiği tüm arızalar nelerdir?",
         "aylin’in planlanan ama tamamlanmayan arızaları nelerdir?",
-    
+        "kerimenin oluşturduğu arızalar nelerdir?",
+        "kerim yılmazın oluşturduğu arızalar nelerdir?",
+        "kerim tarafından yönetilen arızalardan geçen ay planlananın altında tamamlanan işler nelerdir?",
+        "kerime tarafından yönetilen arızalardan geçen ay planlananın altında tamamlanan işler nelerdir?",
+        "kerime oluşturduğu arızalar nedir?",
+        "kerim oluşturduğu arızalar nedir?",
+        "ahmet.yılmaz kullanıcısının oluşturduğu arızalar nelerdir?",
+        "ahmet yılmaz ve su tekin'in oluşturduğu arızalar nelerdir?",
+        "kerim ve eda sunun yönettiği arızalar nelerdir?",
+        "caner ve cemalin yönettiği arızalar nelerdir?",
+        "ahmet.yılmaz kullanıcısının ve ali yılmaz'ın oluşturduğu arızalar nelerdir?",
+        "Selimin oluşturduğu arızalar nelerdir?",
+
     ]
 
 
-    name_filtered_data = pd.read_excel('name_filtered_data.xlsx')
+    name_filtered_data = pd.read_excel('../name_filtered_data.xlsx')
 
     # Run tests 1
     print("Running Turkish NER Masking Tests 1")
