@@ -1,4 +1,5 @@
 from typing import Dict, List, Tuple, Optional
+from src.database import get_people_data
 
 # Turkish verb roots and common words that might be mistaken as names
 COMMON_VERB_ROOTS = [
@@ -18,6 +19,45 @@ COMMON_VERB_ROOTS = [
 TURKISH_POSTPOSITIONS = [
    "ve","ile"
 ]
+
+"""
+# Database'den veri çekme işlemi uygulanacaksa bu kod bloğu kullanılabilir.
+# Fakat bir aşağıdaki Tester.py için kullanılan name_list ve surname_list silinmeli veya yorum satırına alınmalı
+
+people_data = get_people_data()
+
+# Extract name and surname lists
+name_list = people_data['name'].tolist() if 'name' in people_data.columns else []
+surname_list = people_data['surname'].tolist() if 'surname' in people_data.columns else []
+
+"""
+
+name_list = ["Salim","Kerim","Kerime","Su","Melike","Caner","Erhan Avcı","Veli","Erhan","Ayşe","Halil","Cemal","Emine","Kadir","Zeynep","Emrah","Mustafa","Hasan","Mert","Aylin","Eda","Merve Melisa Ezgi","Yıldız","Muhammet","Yıldız","Deniz","Eda","Eda Su","Rıza",
+            "Ahmetcan","Sadık","Merve","Zeynep","Merve Melisa","Merve Melisa","Ahmet","Ulaş", "Ali", 
+            "Ahmet Can", "Mehmet", "Ayşe", "Melike", "Eda", "Büşra", "Sevim", "Merve", "Can Deniz", 
+            "Deniz", "Bekir Ali", "Can", "Deniz"]
+
+surname_list = ["Turan","Yılmaz","Atınç","Tekin","Akdere","Tunç","Yılmaz","Tunç","Avcı","Ramazan","Akca","Albora","Sandal","Kaya","Nur","Akça","Sanlı","Demir","Demir","Atamer","Karaca","Erdoğan Yılmaz","Muhammet","Yıldız","Deniz","Yıldız","Su Karaca","Karaca",
+            "Aydın","Akçakale","Turan","Demir Yılmaz","Bedir","Erdoğan","Yılmaz","Yılmaz","Ferit", 
+            "Demir", "Yılmaz", "Kaya Demir", "Demir", "Çelik", "Öztürk", "Salman", "Yılmaz", 
+            "Can Yılmaz", "Salman", "Demir Yılmaz", "Can Mert", "Alp", "Akça"]
+
+# Küçük harfe çevir
+name_list = [name.lower() for name in name_list]
+surname_list = [surname.lower() for surname in surname_list]
+
+# Çoklu kelimeleri boşluklardan bölerek listeye ekle
+def split_and_extend(word_list):
+    new_words = []
+    for item in word_list:
+        parts = item.split()
+        if len(parts) > 1:
+            new_words.extend(parts)
+    word_list.extend(new_words)
+    return word_list
+
+name_list = split_and_extend(name_list)
+surname_list = split_and_extend(surname_list)
 
 class TextProcessor:
     @staticmethod
@@ -39,13 +79,12 @@ class TextProcessor:
         ]
         
         word_lower = word.lower()
-        original_word = word
-        
+            
         # Önce 3 ve daha uzun ekleri dene
         for suffix in sorted([s for s in suffixes if len(s) >= 3], key=len, reverse=True):
             if word_lower.endswith(suffix.lower()):
                 base = word[:len(word)-len(suffix)]
-                if len(base) <= 1:  # Çok kısa kalan kökleri alma
+                if len(base) <= 1 or (base.lower() not in name_list and base.lower() not in surname_list):  # Çok kısa kalan kökleri alma
                     continue
                 remaining_suffix = word[len(word)-len(suffix):]
                 return base, remaining_suffix
@@ -253,8 +292,4 @@ class TextProcessor:
             else:
                 i += 1
             
-        
-        print(f"111masked_words: {masked_words}")
-        print(f"111detected: {detected}")
-        
         return ' '.join(masked_words), detected 
