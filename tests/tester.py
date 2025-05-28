@@ -98,6 +98,8 @@ def run_tests():
         "caner ve cemalin yönettiği arızalar nelerdir?",
         "ahmet.yılmaz kullanıcısının ve ali yılmaz'ın oluşturduğu arızalar nelerdir?",
         "Selimin oluşturduğu arızalar nelerdir?",
+        "Aylinin oluşturduğu arızalar nelerdir?",
+        "Aliye atanan arızaların listesi nedir?",
 
     ]
 
