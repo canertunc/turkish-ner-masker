@@ -16,7 +16,7 @@ COMMON_VERB_ROOTS = [
 # Bu şuan kullanılmıyor çünkü daha önce alınan bazı hatalar için deneme amaçlı kullanıldığından
 # şuan kullanınılmıyor bundan dolayı içi boş!
 TURKISH_POSTPOSITIONS = [
-    
+   "ve","ile"
 ]
 
 class TextProcessor:
@@ -161,6 +161,7 @@ class TextProcessor:
         best_combination = None
         best_score = 0
         total_words2 = 0
+        last_suffix_word = ""
         
         # First check if current word is a postposition
         if TextProcessor.is_postposition(words[start_idx]):
@@ -197,16 +198,32 @@ class TextProcessor:
                 if score > best_score:
                     if(name_part != None and surname_part != None):
                         total_words2 = len(name_part.split()) + len(surname_part.split())
+                        last_word_best = words[start_idx + total_words2 - 1]
+                        clean_last_word_best, suffix_best = TextProcessor.strip_turkish_suffixes(last_word_best)
+                        last_suffix_word = suffix_best
+                        if(surname_part == last_word_best):
+                            last_suffix_word = ""
+
                     elif(name_part != None and surname_part == None):
                         total_words2 = len(name_part.split())
+                        last_word_best = words[start_idx + total_words2 - 1]
+                        clean_last_word_best, suffix_best = TextProcessor.strip_turkish_suffixes(last_word_best)
+                        last_suffix_word = suffix_best
+                        if(name_part == last_word_best):
+                            last_suffix_word = ""
                     elif(name_part == None and surname_part != None):
                         total_words2 = len(surname_part.split())
+                        last_word_best = words[start_idx + total_words2 - 1]
+                        clean_last_word_best, suffix_best = TextProcessor.strip_turkish_suffixes(last_word_best)
+                        last_suffix_word = suffix_best
+                        if(surname_part == last_word_best):
+                            last_suffix_word = ""
                     else:
                         total_words2 = 0
                     best_combination = (name_part, surname_part, total_words, suffix)
                     best_score = score
         if(best_combination != None):
-            best_combination = (best_combination[0], best_combination[1], total_words2, best_combination[3])
+            best_combination = (best_combination[0], best_combination[1], total_words2, last_suffix_word)
         return best_combination
 
     @staticmethod
