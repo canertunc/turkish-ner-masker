@@ -64,6 +64,7 @@ masked_text, original_text, masked_words = masker.mask_named_entities(text)
 
 print(f"Orijinal: {original_text}")
 print(f"Maskelenmiş: {masked_text}")
+print(f"Algılanan: {masked_words}")
 ```
 
 ### 4. Hızlı Test
