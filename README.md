@@ -387,6 +387,7 @@ Proje, çeşitli senaryoları kapsayan kapsamlı test durumları içerir:
 ### Zayıf Yanlar
 1. Dil Bağımlılığı
 2. Karmaşık Yapı
+3. Yazım Hatalarına Duyarlılık
 
 ## 📄 Lisans
 Bu proje MIT Lisansı altında lisanslanmıştır.
