@@ -100,6 +100,17 @@ def run_tests():
         "Selimin oluşturduğu arızalar nelerdir?",
         "Aylinin oluşturduğu arızalar nelerdir?",
         "Aliye atanan arızaların listesi nedir?",
+        "Ahmmet'e atanan arızaların listesi nedir?",
+        "cnerin yönettiği arızalar nelerdir?",
+        "muhametin yönettiği arızalar nelerdir?",
+        "hassanın yönettiği arızalar nelerdir?",
+        "Ahmet ylmazın yönettiği arızalar nelerdir?",
+        "Ajmet yılmazın yönettiği arızalar nelerdir?",
+        "en son ahmet yılmaz tarafından açılan arızalar nelerdir?",
+        "daha önce ahmet yılmaz tarafından açılan arızalar nelerdir?",
+        "yönettiği arızaları ahmet yılmazın nelerdir?",
+        "Ahmmet yılmazın yönettiği arızalar nelerdir?",
+        "daha önce ayarlanan arızaların kayıtları alındı, ama neden olduğunu kimse bilmiyor bu yüzden bu arızaların kaydını alan ahmet yılmazın yönettiği arızaların kaydını diğer insalarla paylaşmamız gerekir mi?",
 
     ]
 
