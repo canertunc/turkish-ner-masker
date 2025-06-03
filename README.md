@@ -58,7 +58,13 @@ print(f"Maskelenmiş: {masked_text}")
 print(f"Algılanan: {masked_words}")
 ```
 
-### 4. Hızlı Test
+### 4. Programı Çalıştırma
+```bash
+# Veritabanından isim, soyisim, kullanıcı adı ve metin verilerini çekerek maskeleme yapar.
+python main.py
+```
+
+### 5. Hızlı Test
 ```bash
 python tests/tester.py
 ```
