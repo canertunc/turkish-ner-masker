@@ -169,7 +169,22 @@ Sistem üç farklı seviyede bağlam analizi yapar:
 - Kelime uzunluklarını değerlendirir
 - Bağlam ipuçlarına göre skor ayarlar
 
-### 3. Skorlama Sistemi
+### 3. Metin İşleme ve Benzerlik Analizi
+Sistem, metin işleme ve benzerlik analizi için Jellyfish kütüphanesini kullanmaktadır:
+
+#### a) Jaro-Winkler Benzerlik Algoritması
+- İsim ve soyisimlerin benzerlik oranını hesaplar
+- Yazım hatalarına karşı toleranslıdır
+- 0.95 eşik değeri ile çalışır
+- Türkçe karakterleri destekler
+
+#### b) Benzerlik Analizi Özellikleri
+- Küçük yazım hatalarını tolere eder
+- Türkçe karakterlerdeki farklılıkları analiz eder
+- Yüksek doğruluk oranı ile çalışır
+- Hızlı ve verimli işlem yapar
+
+### 4. Skorlama Sistemi
 - **Tam eşleşme**: 100 puan
 - **İsim+Soyad**: 50 + kelime sayısı × 5
 - **Sadece isim/soyad**: 20 + kelime sayısı × 3
@@ -288,21 +303,78 @@ def is_verb_or_common_word(word: str) -> bool:
 
 Proje, çeşitli senaryoları kapsayan kapsamlı test durumları içerir:
 
+### Test Örnekleri ve Maskeleme Sözlüğü
+
 1. Basit isim maskeleme:
    - Girdi: "ahmete geçen hafta atanan arızaların listesi nedir?"
    - Çıktı: "{name}'e geçen hafta atanan arızaların listesi nedir?"
+   - Sözlük:
+     ```python
+     {
+         'name': ['ahmet'],      # İsim
+         'surname': [],          # Soyisim yok
+         'kullanici_adi': []     # Kullanıcı adı yok
+     }
+     ```
 
 2. Birleşik isimler:
    - Girdi: "Merve Melisa Ezgi Erdoğan Yılmaz'a geçen hafta atanan arızaların listesi nedir?"
    - Çıktı: "{name} {surname}'a geçen hafta atanan arızaların listesi nedir?"
+   - Sözlük:
+     ```python
+     {
+         'name': ['merve melisa ezgi'],     # Birleşik isim
+         'surname': ['erdoğan yılmaz'],     # Birleşik soyisim
+         'kullanici_adi': []                # Kullanıcı adı yok
+     }
+     ```
 
 3. E-posta koruma:
    - Girdi: "zeynep'in email adresi 'zeynep.uzun@example.com' olan kişinin çözdüğü arızalar nelerdir?"
    - Çıktı: "{name}'in email adresi 'zeynep.uzun@example.com' olan kişinin çözdüğü arızalar nelerdir?"
+   - Sözlük:
+     ```python
+     {
+         'name': ['zeynep'],     # İsim
+         'surname': [],          # Soyisim yok
+         'kullanici_adi': []     # Kullanıcı adı yok
+     }
+     ```
 
 4. Kullanıcı adı maskeleme:
    - Girdi: 'kullanıcı adı "ali.kaya" olan kişinin çözümlediği arızalar nelerdir?'
    - Çıktı: 'kullanıcı adı "{kullanici_adi}" olan kişinin çözümlediği arızalar nelerdir?'
+   - Sözlük:
+     ```python
+     {
+         'name': [],                # İsim yok
+         'surname': [],             # Soyisim yok
+         'kullanici_adi': ['ali.kaya']  # Kullanıcı adı
+     }
+     ```
+
+5. Karışık senaryo:
+   - Girdi: "ali.demir kullanıcısı ve Ahmet Yılmaz'ın ortak çözdüğü arızalar nelerdir?"
+   - Çıktı: "{kullanici_adi} kullanıcısı ve {name} {surname}'ın ortak çözdüğü arızalar nelerdir?"
+   - Sözlük:
+     ```python
+     {
+         'name': ['ahmet'],         # İsim
+         'surname': ['yılmaz'],     # Soyisim
+         'kullanici_adi': ['ali.demir']  # Kullanıcı adı
+     }
+     ```
+
+### Maskeleme Türleri Açıklaması:
+- **{name}**: Kişi isimleri (Örn: "ahmet", "merve melisa")
+- **{surname}**: Kişi soyadları (Örn: "yılmaz", "erdoğan yılmaz")
+- **{kullanici_adi}**: Sistem kullanıcı adları (Örn: "ali.kaya", "zeynep.demir")
+
+### Önemli Notlar:
+- İsimler ve soyadlar birleşik olabilir (Örn: "merve melisa", "erdoğan yılmaz")
+- Kullanıcı adları genellikle "ad.soyad" formatındadır
+- Türkçe karakterler korunur ve doğru şekilde işlenir
+- Büyük/küçük harf duyarlılığı yoktur, tüm işlemler küçük harfe çevrilerek yapılır
 
 ## 🎯 Güçlü ve Zayıf Yanlar
 
@@ -315,10 +387,8 @@ Proje, çeşitli senaryoları kapsayan kapsamlı test durumları içerir:
 6. Kombinasyon Desteği
 
 ### Zayıf Yanlar
-1. Performans Gereksinimleri
-2. Dil Bağımlılığı
-3. Model Bağımlılığı
-4. Karmaşık Yapı
+1. Dil Bağımlılığı
+2. Karmaşık Yapı
 
 ## 📄 Lisans
 Bu proje MIT Lisansı altında lisanslanmıştır.
