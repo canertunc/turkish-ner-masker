@@ -48,11 +48,10 @@ class NameMasker:
             # Find best name-surname combination
             found_combination = TextProcessor.find_best_name_surname_combination(
                 words, i, self.name_list, self.surname_list)
-            time_words = ["geçen","ay","hafta","ay","yıl","saat","dakika","saniye","dün","geçen hafta","geçen ay","geçen yıl", "önce"]
+            time_words = ["geçen","ay","hafta","ay","yıl","saat","dakika","saniye","dün","geçen hafta","geçen ay","geçen yıl", "önce","son"]
             words[i] = words[i].replace(",", "")
-            if found_combination and words[i] not in time_words:
+            if (found_combination) and (words[i] not in time_words):
                 name_part, surname_part, total_words, suffix = found_combination
-                
                 # Check for verbs
                 if name_part and len(name_part.split()) == 1:
                     first_word = name_part.split()[0]
@@ -211,3 +210,4 @@ class NameMasker:
             masked_words_dict[key] = list(dict.fromkeys(masked_words_dict[key]))
 
         return text, original_text, masked_words_dict 
+    

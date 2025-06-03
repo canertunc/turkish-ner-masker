@@ -1,5 +1,6 @@
 from typing import Dict, List, Tuple, Optional
 from src.database import get_people_data
+from jellyfish import jaro_winkler_similarity
 
 # Turkish verb roots and common words that might be mistaken as names
 COMMON_VERB_ROOTS = [
@@ -134,6 +135,38 @@ class TextProcessor:
         return word.lower() in TURKISH_POSTPOSITIONS
 
     @staticmethod
+    def find_similar_name(word: str, name_list: List[str], threshold: float = 0.95) -> Optional[str]:
+        """Find similar name from the name list using Jaro-Winkler similarity"""
+        best_match = None
+        best_score = 0
+        
+        word = word.lower()
+        for name in name_list:
+            name = name.lower()
+            score = jaro_winkler_similarity(word, name)
+            if score > threshold and score > best_score:
+                best_score = score
+                best_match = name
+        
+        return best_match
+
+    @staticmethod
+    def find_similar_surname(word: str, surname_list: List[str], threshold: float = 0.95) -> Optional[str]:
+        """Find similar surname from the surname list using Jaro-Winkler similarity"""
+        best_match = None
+        best_score = 0
+        
+        word = word.lower()
+        for surname in surname_list:
+            surname = surname.lower()
+            score = jaro_winkler_similarity(word, surname)
+            if score > threshold and score > best_score:
+                best_score = score
+                best_match = surname
+        
+        return best_match
+
+    @staticmethod
     def try_name_surname_combinations(phrase: str, name_list: List[str], 
                                     surname_list: List[str]) -> Optional[Tuple[str, str, int]]:
         """Try different name-surname combinations"""
@@ -148,6 +181,16 @@ class TextProcessor:
             elif word.lower() in [s.lower() for s in surname_list]:
                 return (None, word, 8)
             
+            # Benzer isim kontrolü
+            similar_name = TextProcessor.find_similar_name(word, name_list)
+            if similar_name:
+                return (similar_name, None, 9)
+            
+            # Benzer soyisim kontrolü
+            similar_surname = TextProcessor.find_similar_surname(word, surname_list)
+            if similar_surname:
+                return (None, similar_surname, 7)
+            
             # Tam kelime eşleşmezse, ek ayrılmış halini dene
             base, suffix = TextProcessor.strip_turkish_suffixes(word)
             
@@ -157,7 +200,18 @@ class TextProcessor:
             elif base and base.lower() in [s.lower() for s in surname_list]:
                 return (None, base, 6)
             
+            # Ek ayrılmış halde benzerlik kontrolü
+            if base:
+                similar_name = TextProcessor.find_similar_name(base, name_list)
+                if similar_name:
+                    return (similar_name, None, 7)
+                
+                similar_surname = TextProcessor.find_similar_surname(base, surname_list)
+                if similar_surname:
+                    return (None, similar_surname, 5)
+            
             return None
+        
         
         # Try full phrase as name or surname
         full_phrase = ' '.join(words)
@@ -173,8 +227,22 @@ class TextProcessor:
         for split_point in range(1, len(words)):
             name_part = ' '.join(words[:split_point])
             surname_part = ' '.join(words[split_point:])
+            """
+            similar_name = TextProcessor.find_similar_name(name_part, name_list)
+            similar_surname = TextProcessor.find_similar_surname(surname_part, surname_list)
+            if similar_name:
+                print(f"NB Trying combination: {name_part} - {surname_part}")
+                name_part = similar_name
+                print(f"NA Trying combination: {name_part} - {surname_part}")
+            if similar_surname:
+                print(f"SB Trying combination: {name_part} - {surname_part}")
+                surname_part = similar_surname
+                print(f"SA Trying combination: {name_part} - {surname_part}")
+            """
+
             name_match = name_part.lower() in [n.lower() for n in name_list]
             surname_match = surname_part.lower() in [s.lower() for s in surname_list]
+
             if name_match and surname_match:
                 score = 50 + len(words) * 5
                 if score > best_score:
@@ -262,7 +330,11 @@ class TextProcessor:
                     best_combination = (name_part, surname_part, total_words, suffix)
                     best_score = score
         if(best_combination != None):
-            best_combination = (best_combination[0], best_combination[1], total_words2, last_suffix_word)
+            if(best_combination[1] != None and best_combination[1].split(" ")[-1] != clean_last_word_best):
+                best_combination = None
+            else:
+                best_combination = (best_combination[0], best_combination[1], total_words2, last_suffix_word)
+
         return best_combination
 
     @staticmethod
