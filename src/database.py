@@ -20,14 +20,7 @@ class DatabaseConnection:
                     host=os.getenv("DB_HOST"),
                     port=os.getenv("DB_PORT")
                 )
-            else:  # training
-                self.connection = psycopg2.connect(
-                    dbname=os.getenv("TRAINING_DB_NAME"),
-                    user=os.getenv("TRAINING_DB_USER"),
-                    password=os.getenv("TRAINING_DB_PASSWORD"),
-                    host=os.getenv("TRAINING_DB_HOST"),
-                    port=os.getenv("TRAINING_DB_PORT")
-                )
+                
             return self.connection
         except psycopg2.OperationalError as e:
             print(f"Connection failed: {e}")
@@ -45,8 +38,8 @@ class DatabaseConnection:
         self.close()
 
 def get_training_data():
-    """Get training data from the training database"""
-    with DatabaseConnection("training") as db:
+    """Get training data from the main database"""
+    with DatabaseConnection("main") as db:
         if db.connection:
             query = 'SELECT * FROM "ArizaV1TrainingDataset";'
             return pd.read_sql_query(query, db.connection)
